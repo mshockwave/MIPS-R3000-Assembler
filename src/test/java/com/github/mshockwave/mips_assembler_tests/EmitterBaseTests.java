@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import com.github.mshockwave.mips_assembler.EmitterBase;
 import org.junit.*;
 
+import java.util.BitSet;
+
 public class EmitterBaseTests{
 
     @Test
@@ -34,5 +36,21 @@ public class EmitterBaseTests{
 
         result = EmitterBase.regIndex("$sp");
         assertEquals("$sp", 29, result);
+    }
+
+    @Test
+    public void testRegBits(){
+        //Test EmitterBase.regBits
+
+        System.out.println("Testing EmitterBase.regBits()...");
+
+        BitSet sampleBits = new BitSet(5);
+        sampleBits.set(1, true); //value == 2
+
+        BitSet bits = EmitterBase.regBits("$2");
+        BitSet resultBits = new BitSet(5);
+        resultBits.or(bits);
+
+        assertTrue("$2 to BitSet of size 5", sampleBits.equals(resultBits));
     }
 }

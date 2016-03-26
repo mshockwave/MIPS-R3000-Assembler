@@ -1,11 +1,11 @@
 package com.github.mshockwave.mips_assembler;
 
 import com.github.mshockwave.mips_assembler.grammars.MipsAsmBaseListener;
+import com.google.common.primitives.Ints;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.*;
 
 public class EmitterBase extends MipsAsmBaseListener{
 
@@ -76,4 +76,13 @@ public class EmitterBase extends MipsAsmBaseListener{
 
         return -1;
     }
+
+    public static BitSet regBits(String regStr){
+        int index = regIndex(regStr);
+        byte[] bytes = ByteBuffer.allocate(4)
+                        .order(ByteOrder.LITTLE_ENDIAN)
+                        .putInt(index).array();
+        return BitSet.valueOf(bytes);
+    }
+
 }
