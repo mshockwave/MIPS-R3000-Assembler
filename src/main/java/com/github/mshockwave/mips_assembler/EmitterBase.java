@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class EmitterBase extends MipsAsmBaseListener{
 
-    //Construct context
+    //Context
+    protected int mBaseAddress = 0; //Initial PC address
     protected final Map<String, Field> mLabelsMap = new HashMap<>();
     protected final Map<String, Field> mUnResolvedLabelsMap = new HashMap<>();
 
