@@ -64,13 +64,25 @@ public class MipsAsmBaseListener implements MipsAsmListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterImm(MipsAsmParser.ImmContext ctx) { }
+	@Override public void enterUsigned_imm(MipsAsmParser.Usigned_immContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitImm(MipsAsmParser.ImmContext ctx) { }
+	@Override public void exitUsigned_imm(MipsAsmParser.Usigned_immContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSigned_imm(MipsAsmParser.Signed_immContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSigned_imm(MipsAsmParser.Signed_immContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

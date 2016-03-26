@@ -16,18 +16,25 @@ reg: S_REG
     | A_REG
     | V_REG
     | K_REG
+    | IMM_REG
     | '$zero'
     | '$sp'
     | '$fp'
     | '$ra'
     ;
-imm: NUM_SYM NUM
-    | NUM
+usigned_imm: NUM
+    | HEX_NUM
+    ;
+signed_imm: '-' usigned_imm
+    | usigned_imm
     ;
 
 stat: instr NEWLINE
+    | instr
     | label instr NEWLINE
+    | label instr
     | NEWLINE
+    | COMMENT
     ;
 
 op_add: 'add' rd=reg ',' rs=reg ',' rt=reg
@@ -48,11 +55,11 @@ op_nand: 'nand' rd=reg ',' rs=reg ',' rt=reg
     ;
 op_slt: 'slt' rd=reg ',' rs=reg ',' rt=reg
     ;
-op_sll: 'sll' rd=reg ',' rt=reg ',' NUM
+op_sll: 'sll' rd=reg ',' rt=reg ',' usigned_imm
     ;
-op_srl: 'srl' rd=reg ',' rt=reg ',' NUM
+op_srl: 'srl' rd=reg ',' rt=reg ',' usigned_imm
     ;
-op_sra: 'sra' rd=reg ',' rt=reg ',' NUM
+op_sra: 'sra' rd=reg ',' rt=reg ',' usigned_imm
     ;
 op_jr: 'jr' rs=reg
     ;
@@ -71,41 +78,41 @@ instr_r: op_add
         | op_jr
         ;
 
-op_addi: 'addi' rt=reg ',' rs=reg ',' imm
+op_addi: 'addi' rt=reg ',' rs=reg ',' signed_imm
     ;
-op_addiu: 'addiu' rt=reg ',' rs=reg ',' imm
+op_addiu: 'addiu' rt=reg ',' rs=reg ',' usigned_imm
     ;
-op_lw: 'lw' rt=reg ',' imm '(' rs=reg ')'
+op_lw: 'lw' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_lh: 'lh' rt=reg ',' imm '(' rs=reg ')'
+op_lh: 'lh' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_lhu: 'lhu' rt=reg ',' imm '(' rs=reg ')'
+op_lhu: 'lhu' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_lb: 'lb' rt=reg ',' imm '(' rs=reg ')'
+op_lb: 'lb' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_lbu: 'lbu' rt=reg ',' imm '(' rs=reg ')'
+op_lbu: 'lbu' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_sw: 'sw' rt=reg ',' imm '(' rs=reg ')'
+op_sw: 'sw' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_sh: 'sh' rt=reg ',' imm '(' rs=reg ')'
+op_sh: 'sh' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_sb: 'sb' rt=reg ',' imm '(' rs=reg ')'
+op_sb: 'sb' rt=reg ',' signed_imm '(' rs=reg ')'
     ;
-op_lui: 'lui' rt=reg ',' NUM
+op_lui: 'lui' rt=reg ',' usigned_imm
     ;
-op_andi: 'andi' rt=reg ',' rs=reg ',' NUM
+op_andi: 'andi' rt=reg ',' rs=reg ',' usigned_imm
     ;
-op_ori: 'ori' rt=reg ',' rs=reg ',' NUM
+op_ori: 'ori' rt=reg ',' rs=reg ',' usigned_imm
     ;
-op_nori: 'nori' rt=reg ',' rs=reg ',' NUM
+op_nori: 'nori' rt=reg ',' rs=reg ',' usigned_imm
     ;
-op_slti: 'slti' rt=reg ',' rs=reg ',' imm
+op_slti: 'slti' rt=reg ',' rs=reg ',' signed_imm
     ;
-op_beq: 'beq' rs=reg ',' rt=reg ',' imm
+op_beq: 'beq' rs=reg ',' rt=reg ',' target=iden
     ;
-op_bne: 'beq' rs=reg ',' rt=reg ',' imm
+op_bne: 'bne' rs=reg ',' rt=reg ',' target=iden
     ;
-op_bgtz: 'bgtz' rs=reg ',' imm
+op_bgtz: 'bgtz' rs=reg ',' target=iden
     ;
 instr_i: op_addi
     | op_addiu
@@ -127,9 +134,9 @@ instr_i: op_addi
     | op_bgtz
     ;
 
-op_j: 'j' NUM
+op_j: 'j' target=iden
     ;
-op_jal: 'jal' NUM
+op_jal: 'jal' target=iden
     ;
 instr_j: op_j
     | op_jal
@@ -142,15 +149,17 @@ instr: instr_r
     | instr_i
     | instr_j
     | op_halt
+    | instr COMMENT
     ;
 
 WS: [ \t]+ -> skip ;
 NEWLINE: '\r'? '\n' ;
-COMMENT: '#' .*? NEWLINE -> skip ;
+COMMENT: '#' .*? NEWLINE;
 NUM: [0-9]+ ;
-NUM_SYM: [-+] ;
-ALPHA: [a-zA-A]+ ;
+HEX_NUM: '0'[xX][a-fA-F0-9]+;
+ALPHA: [a-zA-Z]+ ;
 
+IMM_REG: '$'[0-9]+ ;
 S_REG: '$s'[0-7] ;
 T_REG: '$t'[0-9] ;
 V_REG: '$v'[01] ;

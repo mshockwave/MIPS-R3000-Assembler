@@ -48,15 +48,25 @@ public interface MipsAsmListener extends ParseTreeListener {
 	 */
 	void exitReg(MipsAsmParser.RegContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MipsAsmParser#imm}.
+	 * Enter a parse tree produced by {@link MipsAsmParser#usigned_imm}.
 	 * @param ctx the parse tree
 	 */
-	void enterImm(MipsAsmParser.ImmContext ctx);
+	void enterUsigned_imm(MipsAsmParser.Usigned_immContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MipsAsmParser#imm}.
+	 * Exit a parse tree produced by {@link MipsAsmParser#usigned_imm}.
 	 * @param ctx the parse tree
 	 */
-	void exitImm(MipsAsmParser.ImmContext ctx);
+	void exitUsigned_imm(MipsAsmParser.Usigned_immContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MipsAsmParser#signed_imm}.
+	 * @param ctx the parse tree
+	 */
+	void enterSigned_imm(MipsAsmParser.Signed_immContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MipsAsmParser#signed_imm}.
+	 * @param ctx the parse tree
+	 */
+	void exitSigned_imm(MipsAsmParser.Signed_immContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MipsAsmParser#stat}.
 	 * @param ctx the parse tree
