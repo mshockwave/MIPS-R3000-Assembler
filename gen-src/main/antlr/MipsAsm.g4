@@ -154,7 +154,7 @@ instr: instr_r
 
 WS: [ \t]+ -> skip ;
 NEWLINE: '\r'? '\n' ;
-COMMENT: '#' .*? NEWLINE;
+COMMENT: '#' .*? NEWLINE -> skip;
 NUM: [0-9]+ ;
 HEX_NUM: '0'[xX][a-fA-F0-9]+;
 ALPHA: [a-zA-Z]+ ;
