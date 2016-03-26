@@ -13,5 +13,5 @@ public class EmitterBase extends MipsAsmBaseListener{
     protected final Map<String, Field> mLabelsMap = new HashMap<>();
     protected final Map<String, Field> mUnResolvedLabelsMap = new HashMap<>();
 
-    protected final List<InstructionBase> mInstructions = new ArrayList<>();
+    protected final List<Instruction> mInstructions = new ArrayList<>();
 }
