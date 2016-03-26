@@ -6,7 +6,11 @@ import com.github.mshockwave.mips_assembler.grammars.MipsAsmParser;
 public class RInstrsEmitter extends EmitterBase{
 
 
-    @Override public void enterOp_add(MipsAsmParser.Op_addContext ctx) { }
+    @Override public void enterOp_add(MipsAsmParser.Op_addContext ctx) {
+
+
+
+    }
     /**
      * {@inheritDoc}
      *
