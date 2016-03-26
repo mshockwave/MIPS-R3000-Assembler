@@ -33,17 +33,17 @@ public class Instruction {
         Instruction instruction = new Instruction();
         instruction.mInstructionType = Type.R;
 
-        //Op code
+        //Func field
         instruction.mFields.add(new Field(6));
-        //Rs field
-        instruction.mFields.add(new Field(5));
-        //Rt field
+        //Shamt field
         instruction.mFields.add(new Field(5));
         //Rd field
         instruction.mFields.add(new Field(5));
-        //Shamt field
+        //Rt field
         instruction.mFields.add(new Field(5));
-        //Func field
+        //Rs field
+        instruction.mFields.add(new Field(5));
+        //Op code
         instruction.mFields.add(new Field(6));
 
         return instruction;
@@ -53,14 +53,14 @@ public class Instruction {
         Instruction instruction = new Instruction();
         instruction.mInstructionType = Type.I;
 
-        //Op code
-        instruction.mFields.add(new Field(6));
-        //Rs field
-        instruction.mFields.add(new Field(5));
-        //Rt field
-        instruction.mFields.add(new Field(5));
         //Imm field
         instruction.mFields.add(new Field(16));
+        //Rt field
+        instruction.mFields.add(new Field(5));
+        //Rs field
+        instruction.mFields.add(new Field(5));
+        //Op code
+        instruction.mFields.add(new Field(6));
 
         return instruction;
     }
@@ -69,10 +69,10 @@ public class Instruction {
         Instruction instruction = new Instruction();
         instruction.mInstructionType = Type.J;
 
-        //Op code
-        instruction.mFields.add(new Field(6));
         //Addr field
         instruction.mFields.add(new Field(26));
+        //Op code
+        instruction.mFields.add(new Field(6));
 
         return instruction;
     }
@@ -82,8 +82,8 @@ public class Instruction {
         instruction.mInstructionType = Type.S;
 
         //Op code
+        instruction.mFields.add(new Field(26));
         instruction.mFields.add(new Field(6));
-        //instruction.mFields.add(new Field(26));
 
         return instruction;
     }

@@ -13,7 +13,8 @@ public class Field {
         mBits = new BitSet(width);
     }
 
-    public void set(int index){
+    public void or(BitSet bitSet){ mBits.or(bitSet); }
+    public void setBit(int index){
         if(index < mBitWidth) mBits.set(index, true);
     }
     public void clear(int index){

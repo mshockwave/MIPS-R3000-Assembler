@@ -1,14 +1,13 @@
 package com.github.mshockwave.mips_assembler.emitters;
 
 import com.github.mshockwave.mips_assembler.EmitterBase;
+import com.github.mshockwave.mips_assembler.Instruction;
 import com.github.mshockwave.mips_assembler.grammars.MipsAsmParser;
 
 public class RInstrsEmitter extends EmitterBase{
 
 
     @Override public void enterOp_add(MipsAsmParser.Op_addContext ctx) {
-
-
 
     }
     /**
@@ -17,7 +16,23 @@ public class RInstrsEmitter extends EmitterBase{
      * <p>The default implementation does nothing.</p>
      */
     @Override public void exitOp_add(MipsAsmParser.Op_addContext ctx) {
-        
+        Instruction instruction = Instruction.newRTypeInstruction();
+
+        //Func
+        instruction.getField(0).or(immBits(0x20));
+
+        String rs, rt, rd;
+
+        rd = ctx.rd.getText();
+        instruction.getField(1).or(regBits(rd));
+
+        rt = ctx.rt.getText();
+        instruction.getField(2).or(regBits(rt));
+
+        rs = ctx.rs.getText();
+        instruction.getField(3).or(regBits(rs));
+
+        mInstructions.add(instruction);
     }
 
     @Override public void enterOp_addu(MipsAsmParser.Op_adduContext ctx) { }

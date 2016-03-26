@@ -11,7 +11,7 @@ public class EmitterBase extends MipsAsmBaseListener{
 
     //Context
     protected int mBaseAddress = 0; //Initial PC address
-    protected final Map<String, Field> mLabelsMap = new HashMap<>();
+    protected final Map<String, Integer> mLabelsMap = new HashMap<>();
     protected final Map<String, Field> mUnResolvedLabelsMap = new HashMap<>();
 
     protected final List<Instruction> mInstructions = new ArrayList<>();
@@ -85,4 +85,10 @@ public class EmitterBase extends MipsAsmBaseListener{
         return BitSet.valueOf(bytes);
     }
 
+    public static BitSet immBits(int val){
+        byte[] bytes = ByteBuffer.allocate(4)
+                        .order(ByteOrder.LITTLE_ENDIAN)
+                        .putInt(val).array();
+        return BitSet.valueOf(bytes);
+    }
 }
