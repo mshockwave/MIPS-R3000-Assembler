@@ -19,6 +19,17 @@ public class Emitter extends JInstrsEmitter{
         mOutStream = oStream;
     }
 
+    //Op Halt
+    @Override
+    public void exitOp_halt(MipsAsmParser.Op_haltContext ctx) {
+        Instruction instruction = Instruction.newSTypeInstruction();
+
+        instruction.getField(0).or(immBits(0xFFFFFFFF));
+        instruction.getField(1).or(immBits(0xFF));
+
+        mInstructions.add(instruction);
+    }
+
     @Override
     public void exitStat(MipsAsmParser.StatContext ctx){
         //Check whether there is label
@@ -43,15 +54,11 @@ public class Emitter extends JInstrsEmitter{
                         }
 
                         case ResolveKind.JUMP: {
-                            //Create mask to extract (PC+4)[31:28]
-                            int mask = ~((1 << 28) - 1);
 
-                            resultVal = instructionAddr + 4; //PC+4
-                            resultVal &= mask;
+                            int mask = (1 << 28) - 1;
 
-                            int mask2 = (~mask) - 3/*11*/;
-
-                            resultVal |= (labelAddr & mask2);
+                            resultVal = labelAddr & mask;
+                            resultVal >>= 2;
 
                             break;
                         }
