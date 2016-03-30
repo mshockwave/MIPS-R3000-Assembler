@@ -105,4 +105,26 @@ public class EmitterBase extends MipsAsmBaseListener{
                         .putInt(val).array();
         return BitSet.valueOf(bytes);
     }
+
+    protected final int evaluateAddr(int offset){
+        return offset * 4 + mBaseAddress;
+    }
+
+    protected final int resolveBranchTarget(int labelAddr, int instructionAddr){
+        return (labelAddr - (instructionAddr + 4)) / 4;
+    }
+    protected final int resolveBranchTarget(int labelAddr){
+        //Current instruction
+        int instructionAddr = (mInstructions.size() - 1) * 4 + mBaseAddress;
+        return resolveBranchTarget(labelAddr, instructionAddr);
+    }
+
+    protected final int resolveJumpTarget(int labelAddr){
+        int mask = (1 << 28) - 1;
+
+        int resultVal = labelAddr & mask;
+        resultVal >>= 2;
+
+        return resultVal;
+    }
 }

@@ -40,7 +40,7 @@ public class Emitter extends JInstrsEmitter{
             mLabelsMap.put(labelStr, mInstructions.size() - 1);
 
             if(mUnResolvedLabelsMap.containsKey(labelStr)){
-                int labelAddr = mLabelsMap.get(labelStr) * 4 + mBaseAddress;
+                int labelAddr = evaluateAddr(mLabelsMap.get(labelStr));
 
                 List<UnresolvedLabel> labels = mUnResolvedLabelsMap.get(labelStr);
                 for(UnresolvedLabel label : labels){
@@ -49,16 +49,13 @@ public class Emitter extends JInstrsEmitter{
                     int resultVal;
                     switch(label.ResolveKind){
                         case ResolveKind.BRANCH:{
-                            resultVal = (labelAddr - (instructionAddr + 4)) / 4;
+                            resultVal = resolveBranchTarget(labelAddr, instructionAddr);
                             break;
                         }
 
                         case ResolveKind.JUMP: {
 
-                            int mask = (1 << 28) - 1;
-
-                            resultVal = labelAddr & mask;
-                            resultVal >>= 2;
+                            resultVal = resolveJumpTarget(labelAddr);
 
                             break;
                         }

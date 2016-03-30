@@ -11,7 +11,8 @@ public class JInstrsEmitter extends IInstrsEmitter{
     private void configInstructionTarget(Instruction instruction, int op, String target){
         //Try to resolve target label
         if(mLabelsMap.containsKey(target)){
-            instruction.getField(0).or(immBits(mLabelsMap.get(target)));
+            int labelAddr = evaluateAddr(mLabelsMap.get(target));
+            instruction.getField(0).or(immBits(resolveJumpTarget(labelAddr)));
         }else{
             instruction.getField(0).or(immBits(0));
 

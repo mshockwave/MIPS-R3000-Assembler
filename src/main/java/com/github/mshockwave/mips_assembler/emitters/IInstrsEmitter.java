@@ -190,7 +190,8 @@ public class IInstrsEmitter extends RInstrsEmitter{
 
         //Try to resolve target label
         if(mLabelsMap.containsKey(target)){
-            instruction.getField(0).or(immBits(mLabelsMap.get(target)));
+            int labelAddr = evaluateAddr(mLabelsMap.get(target));
+            instruction.getField(0).or(immBits(resolveBranchTarget(labelAddr)));
         }else{
             instruction.getField(0).or(immBits(0));
 
