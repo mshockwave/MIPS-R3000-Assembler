@@ -129,6 +129,9 @@ public class EmitterRInstructionTests {
         }catch (IOException e){
             fail("Failed loading resource file");
             e.printStackTrace();
+        }catch (Exception e){
+            fail("Unknown Exception");
+            e.printStackTrace();
         }
     }
 }

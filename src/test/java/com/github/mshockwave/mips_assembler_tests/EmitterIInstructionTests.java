@@ -42,15 +42,35 @@ public class EmitterIInstructionTests {
             /**-----------------Verify----------------------**/
 
             ByteBuffer buffer = ByteBuffer.wrap(outStream.toByteArray()).order(ByteOrder.BIG_ENDIAN);
+            assertEquals("Output byte length", 4 * 16, buffer.array().length);
 
+            /*
             int i;
             for(i = 0; i < 16; i++){
                 int v = buffer.getInt(i * 4);
                 System.out.println("0x" + Integer.toHexString(v));
-            }
+            }*/
+
+            int v = buffer.getInt(4);
+            assertEquals("Instruction Length", 14, v);
+
+            v = buffer.getInt(8);
+            assertEquals("lhu  $2, 0($0)", 0x94020000, v);
+
+            v = buffer.getInt(12);
+            assertEquals("bne  $2, $0, x_not_0", 0x1440000b, v);
+
+            v = buffer.getInt(16);
+            assertEquals("ori  $5, $0, 0x88", 0x34050088, v);
+
+            v = buffer.getInt(28);
+            assertEquals("bne  $6, $0, x_0_else", 0x14c00005, v);
 
         }catch (IOException e){
             fail("Failed loading resource file");
+            e.printStackTrace();
+        }catch (Exception e){
+            fail("Unknown Exception");
             e.printStackTrace();
         }
     }
