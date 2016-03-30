@@ -52,4 +52,18 @@ public class Utils {
         }
         return result;
     }
+
+    public static int transformHex(String valStr, String exceptionMsg){
+        int v;
+        try{
+            if(valStr.startsWith("0x") || valStr.startsWith("0X")){
+                v = Integer.parseInt(valStr, 16);
+            }else{
+                v = Integer.parseInt(valStr, 10);
+            }
+        }catch (NumberFormatException e){
+            throw new RuntimeException(exceptionMsg);
+        }
+        return v;
+    }
 }

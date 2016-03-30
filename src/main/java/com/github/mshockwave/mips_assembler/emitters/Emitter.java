@@ -27,7 +27,40 @@ public class Emitter extends JInstrsEmitter{
             String labelStr = labelCtx.iden().getText();
             mLabelsMap.put(labelStr, mInstructions.size() - 1);
 
-            //TODO: Resolve labels
+            if(mUnResolvedLabelsMap.containsKey(labelStr)){
+                int labelAddr = mLabelsMap.get(labelStr) * 4 + mBaseAddress;
+
+                UnresolvedLabel label = mUnResolvedLabelsMap.get(labelStr);
+                int instructionAddr = label.InstructionOffset * 4 + mBaseAddress;
+
+                int resultVal;
+                switch(label.ResolveKind){
+                    case ResolveKind.BRANCH:{
+                        resultVal = (labelAddr - (instructionAddr + 4)) / 4;
+                        break;
+                    }
+
+                    case ResolveKind.JUMP: {
+                        //Create mask to extract (PC+4)[31:28]
+                        int mask = ~((1 << 28) - 1);
+
+                        resultVal = instructionAddr + 4; //PC+4
+                        resultVal &= mask;
+
+                        int mask2 = (~mask) - 3/*11*/;
+
+                        resultVal |= (labelAddr & mask2);
+
+                        break;
+                    }
+
+                    default:
+                        throw new RuntimeException("Unrecognized resolved kind");
+                }
+
+                label.Field.or(immBits(resultVal));
+                mUnResolvedLabelsMap.remove(labelStr);
+            }
         }
     }
 
@@ -35,7 +68,16 @@ public class Emitter extends JInstrsEmitter{
     public void exitProg(MipsAsmParser.ProgContext ctx) {
 
         //Epilogue
-        //Print
+        //Check whether there are unresolved labels
+        if(!mUnResolvedLabelsMap.isEmpty()){
+            for (String label : mUnResolvedLabelsMap.keySet()) {
+                System.out.println("Error: Unresolved label: " + label);
+            }
+
+            throw new RuntimeException("Exist unresolved labels");
+        }
+
+        //Print result
 
         //32bits
         ByteBuffer buffer = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN);

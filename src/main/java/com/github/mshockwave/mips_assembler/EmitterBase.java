@@ -1,7 +1,6 @@
 package com.github.mshockwave.mips_assembler;
 
 import com.github.mshockwave.mips_assembler.grammars.MipsAsmBaseListener;
-import com.google.common.primitives.Ints;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,9 +9,24 @@ import java.util.*;
 public class EmitterBase extends MipsAsmBaseListener{
 
     //Context
+    protected static class ResolveKind{
+        public static final int BRANCH = 0;
+        public static final int JUMP = 1;
+    }
+    protected class UnresolvedLabel {
+        public Field Field;
+        public int ResolveKind;
+        public int InstructionOffset;
+
+        public UnresolvedLabel(Field field, int resolveKind, int instructionAddr) {
+            Field = field;
+            ResolveKind = resolveKind;
+            InstructionOffset = instructionAddr;
+        }
+    }
     protected int mBaseAddress = 0; //Initial PC address
     protected final Map<String, Integer> mLabelsMap = new HashMap<>();
-    protected final Map<String, Field> mUnResolvedLabelsMap = new HashMap<>();
+    protected final Map< String, UnresolvedLabel > mUnResolvedLabelsMap = new HashMap<>();
 
     protected final List<Instruction> mInstructions = new ArrayList<>();
 
