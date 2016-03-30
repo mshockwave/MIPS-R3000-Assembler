@@ -1,6 +1,7 @@
 package com.github.mshockwave.mips_assembler;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.List;
 
 public class Instruction {
@@ -26,6 +27,21 @@ public class Instruction {
 
     private Instruction(){
         //Can't construct this class from outside
+    }
+
+    public BitSet getBits(){
+        BitSet result = new BitSet();
+
+        int offset = 0;
+        int i;
+        for(i = 0; i < mFields.size(); i++){
+            Field field = mFields.get(i);
+
+            result.or(Utils.shiftLeft(field.getBits(), offset));
+            offset += field.getBitWidth();
+        }
+
+        return result;
     }
 
     /*Factory methods*/
