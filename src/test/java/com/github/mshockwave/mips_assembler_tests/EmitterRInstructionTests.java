@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-public class EmitterTests {
+public class EmitterRInstructionTests {
 
     @Test
     public void testRInstruction1(){

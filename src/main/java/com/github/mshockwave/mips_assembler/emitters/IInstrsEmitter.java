@@ -4,6 +4,8 @@ import com.github.mshockwave.mips_assembler.Instruction;
 import com.github.mshockwave.mips_assembler.Utils;
 import com.github.mshockwave.mips_assembler.grammars.MipsAsmParser;
 
+import java.util.ArrayList;
+
 public class IInstrsEmitter extends RInstrsEmitter{
 
     private void configInstruction(Instruction instruction, int op, String rs, String rt, String imm){
@@ -194,7 +196,13 @@ public class IInstrsEmitter extends RInstrsEmitter{
 
             //Put into unresolved set
             final UnresolvedLabel label = new UnresolvedLabel(instruction.getField(0), ResolveKind.BRANCH, mInstructions.size());
-            mUnResolvedLabelsMap.put(target, label);
+            if(mUnResolvedLabelsMap.containsKey(target)){
+                mUnResolvedLabelsMap.get(target).add(label);
+            }else{
+                ArrayList<UnresolvedLabel> labels = new ArrayList<>();
+                labels.add(label);
+                mUnResolvedLabelsMap.put(target, labels);
+            }
         }
 
         //rt

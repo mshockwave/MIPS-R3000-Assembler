@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.List;
 
 public class Emitter extends JInstrsEmitter{
 
@@ -30,35 +31,38 @@ public class Emitter extends JInstrsEmitter{
             if(mUnResolvedLabelsMap.containsKey(labelStr)){
                 int labelAddr = mLabelsMap.get(labelStr) * 4 + mBaseAddress;
 
-                UnresolvedLabel label = mUnResolvedLabelsMap.get(labelStr);
-                int instructionAddr = label.InstructionOffset * 4 + mBaseAddress;
+                List<UnresolvedLabel> labels = mUnResolvedLabelsMap.get(labelStr);
+                for(UnresolvedLabel label : labels){
+                    int instructionAddr = label.InstructionOffset * 4 + mBaseAddress;
 
-                int resultVal;
-                switch(label.ResolveKind){
-                    case ResolveKind.BRANCH:{
-                        resultVal = (labelAddr - (instructionAddr + 4)) / 4;
-                        break;
+                    int resultVal;
+                    switch(label.ResolveKind){
+                        case ResolveKind.BRANCH:{
+                            resultVal = (labelAddr - (instructionAddr + 4)) / 4;
+                            break;
+                        }
+
+                        case ResolveKind.JUMP: {
+                            //Create mask to extract (PC+4)[31:28]
+                            int mask = ~((1 << 28) - 1);
+
+                            resultVal = instructionAddr + 4; //PC+4
+                            resultVal &= mask;
+
+                            int mask2 = (~mask) - 3/*11*/;
+
+                            resultVal |= (labelAddr & mask2);
+
+                            break;
+                        }
+
+                        default:
+                            throw new RuntimeException("Unrecognized resolved kind");
                     }
 
-                    case ResolveKind.JUMP: {
-                        //Create mask to extract (PC+4)[31:28]
-                        int mask = ~((1 << 28) - 1);
-
-                        resultVal = instructionAddr + 4; //PC+4
-                        resultVal &= mask;
-
-                        int mask2 = (~mask) - 3/*11*/;
-
-                        resultVal |= (labelAddr & mask2);
-
-                        break;
-                    }
-
-                    default:
-                        throw new RuntimeException("Unrecognized resolved kind");
+                    label.Field.or(immBits(resultVal));
                 }
 
-                label.Field.or(immBits(resultVal));
                 mUnResolvedLabelsMap.remove(labelStr);
             }
         }

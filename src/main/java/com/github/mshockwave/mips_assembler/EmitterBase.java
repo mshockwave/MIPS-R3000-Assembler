@@ -26,7 +26,7 @@ public class EmitterBase extends MipsAsmBaseListener{
     }
     protected int mBaseAddress = 0; //Initial PC address
     protected final Map<String, Integer> mLabelsMap = new HashMap<>();
-    protected final Map< String, UnresolvedLabel > mUnResolvedLabelsMap = new HashMap<>();
+    protected final Map< String, List<UnresolvedLabel> > mUnResolvedLabelsMap = new HashMap<>();
 
     protected final List<Instruction> mInstructions = new ArrayList<>();
 

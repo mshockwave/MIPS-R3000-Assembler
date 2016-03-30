@@ -56,8 +56,10 @@ public class Utils {
     public static int transformHex(String valStr, String exceptionMsg){
         int v;
         try{
-            if(valStr.startsWith("0x") || valStr.startsWith("0X")){
-                v = Integer.parseInt(valStr, 16);
+            if(valStr.contains("0x")){
+                v = Integer.parseInt(valStr.replaceFirst("0x", ""), 16);
+            }else if(valStr.contains("0X")){
+                v = Integer.parseInt(valStr.replaceFirst("0X", ""), 16);
             }else{
                 v = Integer.parseInt(valStr, 10);
             }
