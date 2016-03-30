@@ -21,6 +21,9 @@ public class EmitterTests {
     @Test
     public void testRInstruction1(){
         System.out.println("Testing R type instruction by r_type_1.S...");
+        /*
+        * Test normal registers instructions
+        * */
 
         InputStream testCaseStream = getClass().getClassLoader().getResourceAsStream("r_type_1.S");
 
@@ -40,7 +43,7 @@ public class EmitterTests {
             /**-----------------Verify----------------------**/
 
             ByteBuffer buffer = ByteBuffer.wrap(outStream.toByteArray()).order(ByteOrder.BIG_ENDIAN);
-            assertEquals("Output byte length", 6 * 4, buffer.array().length);
+            assertEquals("Output byte length", 4 * 6, buffer.array().length);
 
             //int i;
             /*
@@ -72,6 +75,56 @@ public class EmitterTests {
                 System.out.println("0x" + Integer.toHexString(v));
             }
             */
+
+            testCaseStream.close();
+
+        }catch (IOException e){
+            fail("Failed loading resource file");
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testRInstruction2(){
+        System.out.println("Testing R type instruction by r_type_2.S...");
+        /*
+        * Test special instructions
+        * Jump, Shift .etc
+        * */
+
+        InputStream testCaseStream = getClass().getClassLoader().getResourceAsStream("r_type_2.S");
+
+        assertNotNull("r_type_2.S is null", testCaseStream);
+
+        try{
+            MipsAsmLexer lexer = new MipsAsmLexer( new ANTLRInputStream(testCaseStream) );
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+            MipsAsmParser parser = new MipsAsmParser(tokens);
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            Emitter emitter = new Emitter(0x0, outStream);
+
+            ParseTreeWalker walker = new ParseTreeWalker();
+            walker.walk(emitter, parser.prog());
+
+            /**-----------------Verify----------------------**/
+
+            ByteBuffer buffer = ByteBuffer.wrap(outStream.toByteArray()).order(ByteOrder.BIG_ENDIAN);
+            assertEquals("Output byte length", 4 * 5, buffer.array().length);
+
+            int v = buffer.getInt(4);
+            assertEquals("Instruction Length", 3, v);
+
+            v = buffer.getInt(8);
+            assertEquals("jr   $ra", 0x03E00008, v);
+
+            v = buffer.getInt(12);
+            assertEquals("srl  $1, $1, 2", 0x00010882, v);
+
+            v = buffer.getInt(16);
+            assertEquals("sra  $1, $1, 3", 0x000108C3, v);
+
+            testCaseStream.close();
 
         }catch (IOException e){
             fail("Failed loading resource file");
