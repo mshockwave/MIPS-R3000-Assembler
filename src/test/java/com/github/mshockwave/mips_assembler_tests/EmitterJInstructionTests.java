@@ -44,12 +44,19 @@ public class EmitterJInstructionTests {
             ByteBuffer buffer = ByteBuffer.wrap(outStream.toByteArray()).order(ByteOrder.BIG_ENDIAN);
             assertEquals("Output byte length", 4 * 18, buffer.array().length);
 
-
+            /*
             int i;
             for(i = 0; i < 18; i++){
                 int v = buffer.getInt(i * 4);
                 System.out.println("0x" + Integer.toHexString(v));
             }
+            */
+
+            int v = buffer.getInt(4);
+            assertEquals("Instruction Length", 16, v);
+
+            v = buffer.getInt(24);
+            assertEquals("jal  sum", 0xc000056, v);
 
         }catch (IOException e){
             fail("Failed loading resource file");
