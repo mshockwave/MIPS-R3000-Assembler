@@ -10,20 +10,20 @@ The compatible Java version is 1.7.
 
 Build / Run
 -----------
-* Build
-  `./gradlew installApp`
+* Build <br/>
+  `./gradlew installApp`<br/>
   The result would be under build/install/mips-r3000-assembler directory.
   
-* Run unit tests
+* Run unit tests <br/>
   `./gradlew test`
   
-* Run
-  `cd build/install/mips-r3000-assembler`
-  `./bin/mips-r3000-assembler` (Linux/Mac)
-  `./bin/mips-r3000-assembler.bat` (Windows)
+* Run <br/>
+  `cd build/install/mips-r3000-assembler`<br/>
+  `./bin/mips-r3000-assembler` (Linux/Mac)<br/>
+  `./bin/mips-r3000-assembler.bat` (Windows)<br/>
   The commandline options' description would be displayed if no arguments were given.<br/>
   You can also run by gradle:<br/>
   `./gradlew run`
   
-* Package to zip
+* Package to zip <br/>
   `./gradelw distZip`
