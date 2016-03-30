@@ -1,5 +1,7 @@
 package com.github.mshockwave.mips_assembler;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.BitSet;
 
 public class Utils {
@@ -32,6 +34,22 @@ public class Utils {
             }
         }
 
+        return result;
+    }
+
+    public static void zeroBufferInt(ByteBuffer buffer){
+        buffer.clear();
+        buffer.putInt(0);
+        buffer.clear();
+    }
+
+    public static byte[] reversedBytes(byte[] bytes){
+        int i;
+        int len = bytes.length;
+        byte[] result = new byte[len];
+        for(i = 0; i < len; i++){
+            result[i] = bytes[len - 1 - i];
+        }
         return result;
     }
 }
